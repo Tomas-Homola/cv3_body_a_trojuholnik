@@ -66,6 +66,8 @@ public:
 	void printData(); // funkcia pre vypisanie dat
 	float obvod();
 	float obsah();
+	void printNormala();
+	void printAngles();
 };
 
 Trojuhlonik::Trojuhlonik() // prazdny konstruktor
@@ -91,7 +93,7 @@ void Trojuhlonik::getData(Bod bod0, Bod bod1, Bod bod2) // funkcia na priradenie
 
 void Trojuhlonik::printData() // funkcia pre vypisanie suradnic jednotlivych bodov
 {
-	cout << "Bod1:" << endl;
+	cout << "Body trojuholnika:\nBod1:" << endl;
 	this->body[0].printData();
 	cout << "Bod2:" << endl;
 	this->body[1].printData();
@@ -110,17 +112,43 @@ float Trojuhlonik::obvod()
 
 float Trojuhlonik::obsah()
 {
-	return 0.0f;
+	float nX = 0.0, nY = 0.0, nZ = 0.0, dist = 0.0; // body pre vysledny vektor (normala ku v1 a v2) po vektorovom sucine; robi sa sucin vektorov v1 (z 0 do 1) a v2 (z 0 do 2)
+
+	nX = body[1].Y() * body[2].Z() - body[2].Y() * body[1].Z();
+	nY = body[1].X() * body[2].Z() - body[2].X() * body[1].Z();
+	nZ = body[1].X() * body[2].Y() - body[2].X() * body[1].Y();
+
+	dist = sqrt((nX - body[0].X()) * (nX - body[0].X()) + (nY - body[0].Y()) * (nY - body[0].Y()) + (nZ - body[0].Z()) * (nZ - body[0].Z()));
+
+	return (dist / 2);
+}
+
+void Trojuhlonik::printNormala()
+{
+	float nX = 0.0, nY = 0.0, nZ = 0.0;
+
+	nX = body[1].Y() * body[2].Z() - body[2].Y() * body[1].Z();
+	nY = body[1].X() * body[2].Z() - body[2].X() * body[1].Z();
+	nZ = body[1].X() * body[2].Y() - body[2].X() * body[1].Y();
+
+	cout << "Suradnice normaly:\nx = " << nX << ", y = " << nY << ", z = " << nZ << endl;
+}
+
+void Trojuhlonik::printAngles()
+{
 }
 
 int main()
 {
 	Bod bod0(0.0, 0.0, 0.0);
 	Bod bod1(1.0, 0.0, 0.0);
-	Bod bod2(0.0, 0.1, 0.0);
+	Bod bod2(0.0, 1.0, 0.0);
 
-
-
+	Trojuhlonik trojuholnik1(bod0, bod1, bod2);
+	trojuholnik1.printData();
+	cout << "obvod trojuholnika: " << trojuholnik1.obvod() << endl;
+	cout << "obsah trojuholnika: " << trojuholnik1.obsah() << endl;
+	trojuholnik1.printNormala();
 
 
 
