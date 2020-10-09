@@ -60,10 +60,12 @@ private:
 
 public:
 	Trojuhlonik(); // prazdny konstruktor
-	Trojuhlonik(Bod bod1, Bod bod2, Bod bod3); // druhy konstruktor
+	Trojuhlonik(Bod bod0, Bod bod1, Bod bod2); // druhy konstruktor
 
-	void getData(Bod bod1, Bod bod2, Bod bod3); // funkcia pre nacitane dat
+	void getData(Bod bod0, Bod bod1, Bod bod2); // funkcia pre nacitane dat
 	void printData(); // funkcia pre vypisanie dat
+	float obvod();
+	float obsah();
 };
 
 Trojuhlonik::Trojuhlonik() // prazdny konstruktor
@@ -73,18 +75,18 @@ Trojuhlonik::Trojuhlonik() // prazdny konstruktor
 	this->body[2].getData(0.0, 0.0, 0.0);
 }
 
-Trojuhlonik::Trojuhlonik(Bod bod1, Bod bod2, Bod bod3) // konstruktor s konkretnymi bodmi
+Trojuhlonik::Trojuhlonik(Bod bod0, Bod bod1, Bod bod2) // konstruktor s konkretnymi bodmi
 {
-	this->body[0] = bod1;
-	this->body[1] = bod2;
-	this->body[2] = bod3;
+	this->body[0] = bod0;
+	this->body[1] = bod1;
+	this->body[2] = bod2;
 }
 
-void Trojuhlonik::getData(Bod bod1, Bod bod2, Bod bod3) // funkcia na priradenie bodov
+void Trojuhlonik::getData(Bod bod0, Bod bod1, Bod bod2) // funkcia na priradenie bodov
 {
-	this->body[0] = bod1;
-	this->body[1] = bod2;
-	this->body[2] = bod3;
+	this->body[0] = bod0;
+	this->body[1] = bod1;
+	this->body[2] = bod2;
 }
 
 void Trojuhlonik::printData() // funkcia pre vypisanie suradnic jednotlivych bodov
@@ -97,29 +99,26 @@ void Trojuhlonik::printData() // funkcia pre vypisanie suradnic jednotlivych bod
 	this->body[2].printData();
 }
 
+float Trojuhlonik::obvod()
+{
+	float dist1 = sqrt((body[1].X() - body[0].X())* (body[1].X() - body[0].X()) + (body[1].Y() - body[0].Y())* (body[1].Y() - body[0].Y()) + (body[1].Z() - body[0].Z())* (body[1].Z() - body[0].Z()));
+	float dist2 = sqrt((body[2].X() - body[0].X()) * (body[2].X() - body[0].X()) + (body[2].Y() - body[0].Y()) * (body[2].Y() - body[0].Y()) + (body[2].Z() - body[0].Z()) * (body[2].Z() - body[0].Z()));
+	float dist3 = sqrt((body[2].X() - body[1].X()) * (body[2].X() - body[1].X()) + (body[2].Y() - body[1].Y()) * (body[2].Y() - body[1].Y()) + (body[2].Z() - body[1].Z()) * (body[2].Z() - body[1].Z()));
+	
+	return (dist1 + dist2 + dist3);
+}
+
+float Trojuhlonik::obsah()
+{
+	return 0.0f;
+}
+
 int main()
 {
-	Bod bod1(1.2, 2.3, 3.4);
-	Bod bod2;
-	Bod bod3(7, 8, 9);
+	Bod bod0(0.0, 0.0, 0.0);
+	Bod bod1(1.0, 0.0, 0.0);
+	Bod bod2(0.0, 0.1, 0.0);
 
-	bod1.printData();
-	bod1.getData(4, 5, 6);
-	bod1.printData();
-	
-	cout << "Bod2:" << endl;
-	bod2.printData();
-
-	Trojuhlonik t1;
-	cout << "Data pre trojuholnik t1:" << endl;
-	t1.printData();
-	t1.getData(bod1, bod2, bod3);
-	cout << "Nove data pre trojuholnik t1:" << endl;
-	t1.printData();
-
-	Trojuhlonik t2(bod1, bod2, bod3);
-	cout << "Data pre trojuholnik t2:" << endl;
-	t2.printData();
 
 
 
