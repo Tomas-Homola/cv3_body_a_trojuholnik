@@ -9,24 +9,24 @@ using namespace std;
 class Bod // class pre Bod
 {
 private:
-	float x;
-	float y;
-	float z;
+	double x;
+	double y;
+	double z;
 
 public:
 	Bod(); // prazdny konstruktor
-	Bod(float x, float y, float z); // ten druhy konstruktor
+	Bod(double x, double y, double z); // ten druhy konstruktor
 
-	void getData(float x, float y, float z); // funkcia na ziskanie dat
+	void getData(double x, double y, double z); // funkcia na ziskanie dat
 	void printData(); // funkcia na vypisanie dat
 
-	void changeX(float x) { this->x = x; } // zmena x suradnice
-	void changeY(float y) { this->y = y; } // zmena y suradnice
-	void changeZ(float z) { this->z = z; } // zmena z suradnice
+	void changeX(double x) { this->x = x; } // zmena x suradnice
+	void changeY(double y) { this->y = y; } // zmena y suradnice
+	void changeZ(double z) { this->z = z; } // zmena z suradnice
 
-	float X() { return this->x; } // vratenie x suradnice
-	float Y() { return this->y; } // vratenie y suradnice
-	float Z() { return this->z; } // vratenie z suradnice
+	double X() { return this->x; } // vratenie x suradnice
+	double Y() { return this->y; } // vratenie y suradnice
+	double Z() { return this->z; } // vratenie z suradnice
 };
 
 Bod::Bod() // prazdny konstruktor
@@ -36,14 +36,14 @@ Bod::Bod() // prazdny konstruktor
 	this->z = 0.0;
 }
 
-Bod::Bod(float x, float y, float z) // konstruktor s konkretnymi hodnotami
+Bod::Bod(double x, double y, double z) // konstruktor s konkretnymi hodnotami
 {
 	this->x = x;
 	this->y = y;
 	this->z = z;
 }
 
-void Bod::getData(float x, float y, float z) // funkcia na ziskanie dat o bode
+void Bod::getData(double x, double y, double z) // funkcia na ziskanie dat o bode
 {
 	this->x = x;
 	this->y = y;
@@ -66,8 +66,8 @@ public:
 
 	void getData(Bod bod0, Bod bod1, Bod bod2); // funkcia pre nacitane dat
 	void printData(); // funkcia pre vypisanie dat
-	float obvod();
-	float obsah();
+	double obvod();
+	double obsah();
 	void printNormala();
 	void printUhly();
 	void printTazisko();
@@ -104,7 +104,7 @@ void Trojuhlonik::printData() // funkcia pre vypisanie suradnic jednotlivych bod
 	this->body[2].printData();
 }
 
-float Trojuhlonik::obvod()
+double Trojuhlonik::obvod()
 {
 	float dist1 = sqrt((body[1].X() - body[0].X())* (body[1].X() - body[0].X()) + (body[1].Y() - body[0].Y())* (body[1].Y() - body[0].Y()) + (body[1].Z() - body[0].Z())* (body[1].Z() - body[0].Z()));
 	float dist2 = sqrt((body[2].X() - body[0].X()) * (body[2].X() - body[0].X()) + (body[2].Y() - body[0].Y()) * (body[2].Y() - body[0].Y()) + (body[2].Z() - body[0].Z()) * (body[2].Z() - body[0].Z()));
@@ -113,37 +113,50 @@ float Trojuhlonik::obvod()
 	return (dist1 + dist2 + dist3);
 }
 
-float Trojuhlonik::obsah()
+double Trojuhlonik::obsah() // rovnako ako komentar pri normale
 {
-	float nX = 0.0, nY = 0.0, nZ = 0.0, dist = 0.0; // body pre vysledny vektor (normala ku v1 a v2) po vektorovom sucine; robi sa sucin vektorov v1 (z 0 do 1) a v2 (z 0 do 2)
-	
-	nX = body[1].Y() * body[2].Z() - body[2].Y() * body[1].Z();
-	nY = body[1].X() * body[2].Z() - body[2].X() * body[1].Z();
-	nZ = body[1].X() * body[2].Y() - body[2].X() * body[1].Y();
+	Bod v1(0.0, 0.0, 0.0); // suradnice pre vektor v1 -> body[1] a body[0]
+	Bod v2(0.0, 0.0, 0.0); // suradnice pre vektor v2 -> body[2] a body[0]
+	Bod normala(0.0, 0.0, 0.0);
+	double dist = 0.0;
 
-	dist = sqrt((nX - body[0].X()) * (nX - body[0].X()) + (nY - body[0].Y()) * (nY - body[0].Y()) + (nZ - body[0].Z()) * (nZ - body[0].Z()));
+	v1.changeX(body[1].X() - body[0].X());
+	v1.changeY(body[1].Y() - body[0].Y());
+	v1.changeZ(body[1].Z() - body[0].Z());
+
+	v2.changeX(body[2].X() - body[0].X());
+	v2.changeY(body[2].Y() - body[0].Y());
+	v2.changeZ(body[2].Z() - body[0].Z());
+
+	normala.changeX(v1.Y() * v2.Z() - v1.Z() * v2.Y());
+	normala.changeY(v1.Z() * v2.X() - v1.X() * v2.Z());
+	normala.changeZ(v1.X() * v2.Y() - v1.Y() * v2.X());
+
+	dist = sqrt(normala.X() * normala.X() + normala.Y() * normala.Y() + normala.Z() * normala.Z());
 
 	return (dist / 2);
-}
+} 
 
-void Trojuhlonik::printNormala()
+void Trojuhlonik::printNormala() // skusit spravit tak, aby bola private premenna pre normalu a nemuselo ju pocitat vzdy ked ju chcem vypisat???
 {
-	float x1, y1, z1; // suradnice pre vektor v1 -> body[1] a body[0]
-	float x2, y2, z2; // suradnice pre vektor v2 -> body[2] a body[0]
+	Bod v1(0.0, 0.0, 0.0); // suradnice pre vektor v1 -> body[1] a body[0]
+	Bod v2(0.0, 0.0, 0.0); // suradnice pre vektor v2 -> body[2] a body[0]
+	Bod normala(0.0, 0.0, 0.0);
 	
-	x1 = body[1].X() - body[0].X();
-	y1 = body[1].Y() - body[0].Y();
-	z1 = body[1].Z() - body[0].Z();
+	v1.changeX(body[1].X() - body[0].X());
+	v1.changeY(body[1].Y() - body[0].Y());
+	v1.changeZ(body[1].Z() - body[0].Z());
 
-	x2 = body[2].X() - body[0].X();
-	y2 = body[2].Y() - body[0].Y();
-	z2 = body[2].Z() - body[0].Z();
+	v2.changeX(body[2].X() - body[0].X());
+	v2.changeY(body[2].Y() - body[0].Y());
+	v2.changeZ(body[2].Z() - body[0].Z());
 
-	float nX = y1 * z2 - y2 * z1;
-	float nY = x1 * z2 - x2 * z1;
-	float nZ = x1 * y2 - x2 * y1;
+	normala.changeX(v1.Y() * v2.Z() - v1.Z() * v2.Y());
+	normala.changeY(v1.Z() * v2.X() - v1.X() * v2.Z());
+	normala.changeZ(v1.X() * v2.Y() - v1.Y() * v2.X());
 
-	cout << "Suradnice normaly:\nx = " << nX << ", y = " << nY << ", z = " << nZ << endl;
+
+	cout << "Suradnice normaly:\nx = " << normala.X() << ", y = " << normala.Y() << ", z = " << normala.Z() << endl;
 }
 
 void Trojuhlonik::printUhly()
