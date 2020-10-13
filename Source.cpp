@@ -116,7 +116,7 @@ float Trojuhlonik::obvod()
 float Trojuhlonik::obsah()
 {
 	float nX = 0.0, nY = 0.0, nZ = 0.0, dist = 0.0; // body pre vysledny vektor (normala ku v1 a v2) po vektorovom sucine; robi sa sucin vektorov v1 (z 0 do 1) a v2 (z 0 do 2)
-
+	
 	nX = body[1].Y() * body[2].Z() - body[2].Y() * body[1].Z();
 	nY = body[1].X() * body[2].Z() - body[2].X() * body[1].Z();
 	nZ = body[1].X() * body[2].Y() - body[2].X() * body[1].Y();
